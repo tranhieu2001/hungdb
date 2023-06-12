@@ -1,9 +1,13 @@
 <div class="container-xl p-0">
   <h1>HELLO WỎLD</h1>
   <a href="/form">Bấm vào đây để vào Form</a>
-  <br>
-  <a href="/json">Bấm vào đây để vào JSON</a>
-  <br>
+  <form method="POST" action="/form/json" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="jsonFileInput" class="form-label">Import file JSON:</label>
+      <input type="file" id="jsonFileInput" class="form-control" name="jsonFile" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Tải lên</button>
+  </form>
 
 
   {{#if error}}
@@ -38,9 +42,8 @@
 
   deleteButton.forEach((button) => {
     button.onclick = () => {
-      form.action = `/car/${button.dataset.id}`
+      form.action = `/car/${button.dataset.id}?_method=DELETE`
       form.submit()
     }
   })
-
 </script>

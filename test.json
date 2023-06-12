@@ -1,11 +1,12 @@
-{
-  "name": "John Doe",
-  "age": 30,
-  "email": "johndoe@example.com",
-  "address": {
-    "street": "123 Main St",
-    "city": "New York",
-    "country": "USA"
+[
+  {
+    "carNumber": "ABC123",
+    "timeIn": "11h20",
+    "timeOut": "14h30"
   },
-  "phoneNumbers": ["+1 123-456-7890", "+1 987-654-3210"]
-}
+  {
+    "carNumber": "DEF456",
+    "timeIn": "17h30",
+    "timeOut": ""
+  }
+]

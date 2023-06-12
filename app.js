@@ -1,7 +1,7 @@
 // app.js
 const express = require('express')
 const { create } = require('express-handlebars')
-const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 
 const connect = require('./config/db')
 const controllers = require('./controllers')
@@ -22,11 +22,12 @@ const hbs = create({
   extname: '.hbs',
 })
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 app.engine('.hbs', hbs.engine)
 app.set('view engine', '.hbs')
 app.set('views', './views')
+app.use(methodOverride('_method'))
 
 connect()
 controllers(app)
