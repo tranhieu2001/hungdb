@@ -34,7 +34,7 @@ function controllers(app) {
       .catch(next)
   })
 
-  app.post('/form/json', upload.single('jsonFile'), (req, res) => {
+  app.post('/form/json', upload.single('jsonFile'), (req, res, next) => {
     const jsonData = req.file.buffer.toString('utf8')
     const carsData = JSON.parse(jsonData)
 
@@ -46,10 +46,7 @@ function controllers(app) {
       .then(() => {
         res.redirect('/')
       })
-      .catch((error) => {
-        console.error('Error importing data:', error)
-        res.status(500).send('Error importing data')
-      })
+      .catch(next)
   })
 
   // [DELETE] method
