@@ -1,49 +1,52 @@
-<div class="container-xl p-0">
+<div class="container-xxl p-0 mt-4">
   <h1>HELLO WỎLD</h1>
   <a href="/form">Bấm vào đây để vào Form</a>
-  <form method="POST" action="/form/json" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="jsonFileInput" class="form-label">Import file JSON:</label>
-      <input type="file" id="jsonFileInput" class="form-control" name="jsonFile" required>
+  <br>
+  <a href="/data">Bấm vào đây để vào Data</a>
+  <br></br>
+  <div class="row gx-2" style="height: 350px;">
+    <div class="col-lg-5">
+      <iframe style="width:100%; height:100%;" src="https://www.youtube.com/embed/Yw9Ra2UiVLw"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
     </div>
-    <button type="submit" class="btn btn-primary">Tải lên</button>
-  </form>
-
-
-  {{#if error}}
-  <p style="color: red;">{{error}}</p>
-  {{/if}}
-
-  <h1>Danh sách xe</h1>
-  <div class="row g-2">
-    {{#each users}}
-    <div class="col-lg-4 col-sm-6">
-      <div class="card" style="height: 100%; ">
-        <img src="data:image/jpeg;base64,{{imageToString this.image}}" style="height: 200px; object-fit:cover"
-          class="card-img-top" alt="">
-        <div class="card-body">
-          <h5 class="card-title">Biển số xe: {{this.carNumber}}</h5>
-          <h5 class="card-title">Thời gian vào: {{this.timeIn}}</h5>
-          <h5 class="card-title">Thời gian ra: {{this.timeOut}}</h5>
-        </div>
-        <button class="btn btn-danger delete-button" data-id="{{this._id}}">Xóa</button>
-      </div>
+    <div class=" col-lg-5">
+      <iframe style="width:100%; height:100%" src="https://www.youtube.com/embed/dz6xe0xXqYE"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
     </div>
-    {{else}}
-    <p>Không có xe nào.</p>
-    {{/each}}
-    <form name="delete-car" method="POST"></form>
+    <div class="col-lg-2">
+      <img src="https://mcdn.coolmate.me/image/April2023/meme-ech-xanh-1.jpg" alt=""
+        style="width:100%; object-fit:cover;">
+      <h5>Biển số xe:</h5>
+      <p>Metadata:</p>
+    </div>
+  </div>
+  <div class="row gx-2" style="height: 100px; ">
+    <h3 style="line-height: 100px;">Khớp, đéo khớp</h3>
+  </div>
+  <div class="row gx-2" style="height: 350px;">
+    <div class="col-lg-5">
+      <iframe style="width:100%; height:100%" src="https://www.youtube.com/embed/6fzH7a3XQW0"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+    <div class=" col-lg-5">
+      <iframe style="width:100%; height:100%" src="https://www.youtube.com/embed/L_z9YHX5ous"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+    <div class="col-lg-2">
+      <img src="https://mcdn.coolmate.me/image/April2023/meme-ech-xanh-1.jpg" alt=""
+        style="width:100%; object-fit:cover;">
+      <h5>Biển số xe:</h5>
+      <p>Metadata:</p>
+    </div>
   </div>
 </div>
-
-<script>
-  const form = document.forms['delete-car']
-  const deleteButton = document.querySelectorAll('.delete-button')
-
-  deleteButton.forEach((button) => {
-    button.onclick = () => {
-      form.action = `/car/${button.dataset.id}?_method=DELETE`
-      form.submit()
-    }
-  })
-</script>

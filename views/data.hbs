@@ -1,0 +1,44 @@
+<div class="container p-0 mt-4">
+  <div style="padding-bottom: 20px;">
+    <a href="/">Bấm vào đây để về Home</a>
+    <br>
+    <a href="/form">Bấm vào đây để vào Form</a>
+  </div>
+
+  {{#if error}}
+  <p style="color: red;">{{error}}</p>
+  {{/if}}
+
+  <h1>Danh sách xe</h1>
+  <div class="row g-2">
+    {{#each users}}
+    <div class="col-lg-4 col-sm-6">
+      <div class="card" style="height: 100%; ">
+        <img src="data:image/jpeg;base64,{{imageToString this.image}}" style="height: 200px; object-fit:cover"
+          class="card-img-top" alt="">
+        <div class="card-body">
+          <h5 class="card-title">Biển số xe: {{this.carNumber}}</h5>
+          <h5 class="card-title">Thời gian vào: {{this.timeIn}}</h5>
+          <h5 class="card-title">Thời gian ra: {{this.timeOut}}</h5>
+        </div>
+        <button class="btn btn-danger delete-button" data-id="{{this._id}}">Xóa</button>
+      </div>
+    </div>
+    {{else}}
+    <p>Không có xe nào.</p>
+    {{/each}}
+    <form name="delete-car" method="POST"></form>
+  </div>
+</div>
+
+<script>
+  const form = document.forms['delete-car']
+  const deleteButton = document.querySelectorAll('.delete-button')
+
+  deleteButton.forEach((button) => {
+    button.onclick = () => {
+      form.action = `/data/${button.dataset.id}?_method=DELETE`
+      form.submit()
+    }
+  })
+</script>

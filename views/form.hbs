@@ -1,9 +1,21 @@
 {{#if error}}
 <p style="color: red;">{{error}}</p>
 {{/if}}
-<div style="width: 800px; margin: 20px 0 0 20px;">
-  <div style="padding-bottom: 20px;"><a href="/">Bấm vào đây để về Home</a></div>
 
+<div class=" p-0 mt-4" style="width:800px;margin: 0 auto;">
+  <div style="padding-bottom: 20px;">
+    <a href="/">Bấm vào đây để về Home</a>
+    <br>
+    <a href="/data">Bấm vào đây để vào Data</a>
+  </div>
+  <form method="POST" action="/form/json" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="jsonFileInput" class="form-label">Import file JSON:</label>
+      <input type="file" id="jsonFileInput" class="form-control" name="jsonFile" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Tải lên</button>
+  </form>
+  <br>
   <form action="/form" method="POST" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="image" class="form-label">Hình ảnh:</label>

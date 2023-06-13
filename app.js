@@ -4,7 +4,7 @@ const { create } = require('express-handlebars')
 const methodOverride = require('method-override')
 
 const connect = require('./config/db')
-const controllers = require('./controllers')
+const route = require('./routes')
 
 const app = express()
 const PORT = 3000
@@ -30,7 +30,7 @@ app.set('views', './views')
 app.use(methodOverride('_method'))
 
 connect()
-controllers(app)
+route(app)
 
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`)
