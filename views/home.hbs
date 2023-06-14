@@ -5,19 +5,12 @@
   <a href="/data">Bấm vào đây để vào Data</a>
   <br></br>
   <div class="row gx-2" style="height: 350px;">
-    <div class="col-lg-5">
-      <iframe style="width:100%; height:100%;" src="https://www.youtube.com/embed/Yw9Ra2UiVLw"
-        title="YouTube video player" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
+    <div class="col-lg-5" style="position: relative;">
+      <video id="videoCam"
+        style="height:350px; position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"></video>
     </div>
     <div class=" col-lg-5">
-      <iframe style="width:100%; height:100%" src="https://www.youtube.com/embed/dz6xe0xXqYE"
-        title="YouTube video player" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
+
     </div>
     <div class="col-lg-2">
       <img src="https://mcdn.coolmate.me/image/April2023/meme-ech-xanh-1.jpg" alt=""
@@ -31,16 +24,10 @@
   </div>
   <div class="row gx-2" style="height: 350px;">
     <div class="col-lg-5">
-      <iframe style="width:100%; height:100%" src="https://www.youtube.com/embed/6fzH7a3XQW0"
-        title="YouTube video player" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
+
     </div>
     <div class=" col-lg-5">
-      <iframe style="width:100%; height:100%" src="https://www.youtube.com/embed/L_z9YHX5ous"
-        title="YouTube video player" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
+
     </div>
     <div class="col-lg-2">
       <img src="https://mcdn.coolmate.me/image/April2023/meme-ech-xanh-1.jpg" alt=""
@@ -50,3 +37,33 @@
     </div>
   </div>
 </div>
+
+<script>
+  function openCam() {
+    let allMediaDevices = navigator.mediaDevices
+    if (!allMediaDevices || !allMediaDevices.getUserMedia) {
+      console.log("getUserMedia() not supported.");
+      return;
+    }
+
+    allMediaDevices.getUserMedia({
+      video: true
+    })
+      .then(function (vidStream) {
+        var video = document.getElementById('videoCam');
+        if ("srcObject" in video) {
+          video.srcObject = vidStream;
+        } else {
+          video.src = window.URL.createObjectURL(vidStream);
+        }
+        video.onloadedmetadata = function (e) {
+          video.play();
+        };
+      })
+      .catch(function (e) {
+        console.log(e.name + ": " + e.message);
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', openCam)
+</script>
