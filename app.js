@@ -18,6 +18,12 @@ const hbs = create({
       const imageString = image.toString('base64')
       return imageString
     },
+    ifEqual: function (a, b, options) {
+      if (a === b) {
+        return options.fn(this)
+      }
+      return options.inverse(this)
+    },
   },
   extname: '.hbs',
 })

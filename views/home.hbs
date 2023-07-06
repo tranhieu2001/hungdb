@@ -4,66 +4,46 @@
   <br>
   <a href="/data">Bấm vào đây để vào Data</a>
   <br></br>
-  <div class="row gx-2" style="height: 350px;">
+  <div class="row gx-2 dataIn" style="height: 350px;">
     <div class="col-lg-5" style="position: relative;">
-      <video id="videoCam"
-        style="height:350px; position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"></video>
+      <img class="imageInFirst" src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageInFirst}}{{/if}}"
+        alt="" style="height: 350px; width:100%">
     </div>
     <div class=" col-lg-5">
-
+      <img class="imageInSecond" src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageInSecond}}{{/if}}"
+        alt="" style="height: 350px; width:100%">
     </div>
-    <div class="col-lg-2">
-      <img src="https://mcdn.coolmate.me/image/April2023/meme-ech-xanh-1.jpg" alt=""
+    <div class=" col-lg-2">
+      <img class="imageCarNumberIn"
+        src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageCarNumberIn}}{{/if}}" alt=""
         style="width:100%; object-fit:cover;">
-      <h5>Biển số xe:</h5>
+      <h5>Biển số xe: {{#if carIn}}{{carIn.carNumberIn}}{{/if}}</h5>
       <p>Metadata:</p>
     </div>
   </div>
-  <div class="row gx-2" style="height: 100px; ">
-    <h3 style="line-height: 100px;">Khớp, đéo khớp</h3>
+
+  <div class="row gx-2 dataOut dataMatch" style="height: 80px; ">
+    <h3 style="line-height: 80px;">{{#if carIn}}{{#if carOut}}{{#ifEqual carIn.carNumberIn
+      carOut.carNumberOut}}Khớp{{else}}Đéo khớp{{/ifEqual}}{{/if}}{{/if}}</h3>
   </div>
+
   <div class="row gx-2" style="height: 350px;">
     <div class="col-lg-5">
-
+      <img class="imageOutFirst"
+        src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageOutFirst}}{{/if}}" alt=""
+        style="height: 350px; width:100%">
     </div>
     <div class=" col-lg-5">
-
+      <img class="imageOutSecond"
+        src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageOutSecond}}{{/if}}" alt=""
+        style="height: 350px; width:100%">
     </div>
     <div class="col-lg-2">
-      <img src="https://mcdn.coolmate.me/image/April2023/meme-ech-xanh-1.jpg" alt=""
+      <img class="imageCarNumberOut"
+        src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageCarNumberOut}}{{/if}}" alt=""
         style="width:100%; object-fit:cover;">
-      <h5>Biển số xe:</h5>
+      <h5>Biển số xe: {{#if carOut}}{{carOut.carNumberOut}}{{/if}}</h5>
       <p>Metadata:</p>
     </div>
   </div>
 </div>
-
-<script>
-  function openCam() {
-    let allMediaDevices = navigator.mediaDevices
-    if (!allMediaDevices || !allMediaDevices.getUserMedia) {
-      console.log("getUserMedia() not supported.");
-      return;
-    }
-
-    allMediaDevices.getUserMedia({
-      video: true
-    })
-      .then(function (vidStream) {
-        var video = document.getElementById('videoCam');
-        if ("srcObject" in video) {
-          video.srcObject = vidStream;
-        } else {
-          video.src = window.URL.createObjectURL(vidStream);
-        }
-        video.onloadedmetadata = function (e) {
-          video.play();
-        };
-      })
-      .catch(function (e) {
-        console.log(e.name + ": " + e.message);
-      });
-  }
-
-  document.addEventListener('DOMContentLoaded', openCam)
-</script>

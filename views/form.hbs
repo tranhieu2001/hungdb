@@ -17,21 +17,42 @@
   </form>
   <br>
   <form action="/form" method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="image" class="form-label">Hình ảnh:</label>
-      <input type="file" id="image" name="image" class="form-control" required>
+    <div class="formIn">
+      <div class="mb-3">
+        <label for="imageInFirst" class="form-label">Hình ảnh vào 1:</label>
+        <input type="file" id="imageInFirst" name="imageInFirst" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="imageInSecond" class="form-label">Hình ảnh vào 2:</label>
+        <input type="file" id="imageInSecond" name="imageInSecond" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="imageCarNumberIn" class="form-label">Hình ảnh biển số xe vào:</label>
+        <input type="file" id="imageCarNumberIn" name="imageCarNumberIn" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="timeIn" class="form-label">Thời gian vào:</label>
+        <input type="text" id="timeIn" name="timeIn" class="form-control" required>
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="carNumber" class="form-label">Biển số xe:</label>
-      <input type="text" id="carNumber" name="carNumber" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label for="timeIn" class="form-label">Thời gian vào:</label>
-      <input type="text" id="timeIn" name="timeIn" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label for="timeOut" class="form-label">Thời gian ra:</label>
-      <input type="text" id="timeOut" name="timeOut" class="form-control" required>
+
+    <div class="formOut">
+      <div class="mb-3">
+        <label for="imageOutFirst" class="form-label">Hình ảnh ra 1:</label>
+        <input type="file" id="imageOutFirst" name="imageOutFirst" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="imageOutSecond" class="form-label">Hình ảnh ra 2:</label>
+        <input type="file" id="imageOutSecond" name="imageOutSecond" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="imageCarNumberOut" class="form-label">Hình ảnh biển số xe ra:</label>
+        <input type="file" id="imageCarNumberOut" name="imageCarNumberOut" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="timeOut" class="form-label">Thời gian ra:</label>
+        <input type="text" id="timeOut" name="timeOut" class="form-control" required>
+      </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>

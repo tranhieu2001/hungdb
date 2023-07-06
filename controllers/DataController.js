@@ -1,22 +1,46 @@
-const Car = require('../models/car')
+const CarIn = require('../models/CarIn')
+const CarOut = require('../models/CarOut')
 
 class DataController {
-  render(req, res) {
-    Car.find({})
-      .exec()
-      .then((cars) => {
-        res.render('data', { users: cars.map((car) => car.toObject()) })
+  async render(req, res) {
+    try {
+      const carInData = CarIn.find({}).exec()
+      const carOutData = CarOut.find({}).exec()
+
+      const [carIns, carOuts] = await Promise.all([carInData, carOutData])
+
+      res.render('data', {
+        carIns: carIns.map((car) => car.toObject()),
+        carOuts: carOuts.map((car) => car.toObject()),
       })
-      .catch((err) => {
-        console.error(err)
-        res.render('data', { error: 'Đã xảy ra lỗi khi lấy dữ liệu' })
-      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).send('Có lỗi khi tải dữ liệu')
+    }
   }
 
-  deleteCar(req, res, next) {
-    Car.deleteOne({ _id: req.params.id })
-      .then(() => res.redirect('back'))
-      .catch(next)
+  async deleteCar(req, res, next) {
+    function deleteByModel(model, id) {
+      model
+        .deleteOne({ _id: id })
+        .then(() => res.redirect('back'))
+        .catch(next)
+    }
+
+    try {
+      const type = req.params.type
+      const id = req.params.id
+      if (type === 'carin') {
+        await deleteByModel(CarIn, id)
+        res.redirect('/data')
+      } else {
+        await deleteByModel(CarOut, id)
+        res.redirect('/data')
+      }
+    } catch (error) {
+      console.error(error)
+      res.status(500).send('Có lỗi khi xóa')
+    }
   }
 }
 
