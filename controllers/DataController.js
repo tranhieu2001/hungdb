@@ -30,13 +30,17 @@ class DataController {
     try {
       const type = req.params.type
       const id = req.params.id
-      if (type === 'carin') {
-        await deleteByModel(CarIn, id)
-        res.redirect('/data')
-      } else {
-        await deleteByModel(CarOut, id)
-        res.redirect('/data')
+      switch (type) {
+        case 'carin':
+          deleteByModel(CarIn, id)
+          break
+        case 'carout':
+          deleteByModel(CarOut, id)
+          break
+        default:
+          break
       }
+      res.redirect('/data')
     } catch (error) {
       console.error(error)
       res.status(500).send('Có lỗi khi xóa')

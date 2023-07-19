@@ -2,6 +2,7 @@
 const express = require('express')
 const { create } = require('express-handlebars')
 const methodOverride = require('method-override')
+const path = require('path')
 
 const connect = require('./config/db')
 const route = require('./routes')
@@ -28,8 +29,9 @@ const hbs = create({
   extname: '.hbs',
 })
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
+app.use(express.json({ limit: '50mb' }))
+app.use(express.static(path.join(__dirname, 'public')))
 app.engine('.hbs', hbs.engine)
 app.set('view engine', '.hbs')
 app.set('views', './views')

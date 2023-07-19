@@ -4,46 +4,103 @@
   <br>
   <a href="/data">Bấm vào đây để vào Data</a>
   <br></br>
-  <div class="row gx-2 dataIn" style="height: 350px;">
+  <div class="row gx-2 data " style="height: 350px;">
     <div class="col-lg-5" style="position: relative;">
-      <img class="imageInFirst" src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageInFirst}}{{/if}}"
-        alt="" style="height: 350px; width:100%">
+      <video class="video" style="height: 350px; width: 100%; object-fit: cover" controls>
+        <source src="/video/test.MOV" type="video/mp4">
+      </video>
     </div>
     <div class=" col-lg-5">
-      <img class="imageInSecond" src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageInSecond}}{{/if}}"
-        alt="" style="height: 350px; width:100%">
+      <img class="imageCapture" style="height: 350px; width:100%"></img>
     </div>
-    <div class=" col-lg-2">
-      <img class="imageCarNumberIn"
-        src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageCarNumberIn}}{{/if}}" alt=""
-        style="width:100%; object-fit:cover;">
-      <h5>Biển số xe: {{#if carIn}}{{carIn.carNumberIn}}{{/if}}</h5>
-      <p>Metadata:</p>
+    <div class="col-lg-2" style="display: flex; flex-direction:column; height:350px">
+      <div style="flex: 1;">
+        <img class="imageCar imageCarNumberIn"
+          src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageCarNumberIn}}{{/if}}" alt=""
+          style="width:100%; object-fit:cover;">
+        <h5>Biển số xe: {{#if carIn}}{{carIn.carNumberIn}}{{/if}}</h5>
+        <p>Metadata:</p>
+      </div>
+      <button style="width: 100%; " type="button" class="btn btn-primary captureBtn" data-button="carin">Chụp</button>
     </div>
   </div>
 
-  <div class="row gx-2 dataOut dataMatch" style="height: 80px; ">
+  <div class="row gx-2  dataMatch" style="height: 80px; ">
     <h3 style="line-height: 80px;">{{#if carIn}}{{#if carOut}}{{#ifEqual carIn.carNumberIn
       carOut.carNumberOut}}Khớp{{else}}Đéo khớp{{/ifEqual}}{{/if}}{{/if}}</h3>
   </div>
 
-  <div class="row gx-2" style="height: 350px;">
-    <div class="col-lg-5">
-      <img class="imageOutFirst"
-        src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageOutFirst}}{{/if}}" alt=""
-        style="height: 350px; width:100%">
+  <div class="row gx-2 data" style="height: 350px;">
+    <div class="col-lg-5" style="position: relative;">
+      <video class="video" style="height: 350px; width: 100%;object-fit: cover" controls>
+        <source src="/video/test.MOV" type="video/mp4">
+      </video>
     </div>
     <div class=" col-lg-5">
-      <img class="imageOutSecond"
-        src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageOutSecond}}{{/if}}" alt=""
-        style="height: 350px; width:100%">
+      <img class="imageCapture" style="height: 350px; width:100%"></img>
     </div>
-    <div class="col-lg-2">
-      <img class="imageCarNumberOut"
-        src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageCarNumberOut}}{{/if}}" alt=""
-        style="width:100%; object-fit:cover;">
-      <h5>Biển số xe: {{#if carOut}}{{carOut.carNumberOut}}{{/if}}</h5>
-      <p>Metadata:</p>
+    <div class="col-lg-2" style="display: flex; flex-direction:column; height:350px">
+      <div style="flex: 1;">
+        <img class="imageCar imageCarNumberOut"
+          src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageCarNumberOut}}{{/if}}" alt=""
+          style="width:100%; object-fit:cover;">
+        <h5>Biển số xe: {{#if carOut}}{{carOut.carNumberOut}}{{/if}}</h5>
+        <p>Metadata:</p>
+      </div>
+      <button style="width: 100%; " type="button" class="btn btn-primary captureBtn" data-button="carout">Chụp</button>
+
     </div>
   </div>
 </div>
+<script>
+  const captureBtns = document.querySelectorAll('.captureBtn')
+
+  const dataElements = document.querySelectorAll('.data')
+
+  const dataChilds = Array.from(dataElements).map(dataElement => {
+    return {
+      video: dataElement.getElementsByClassName('video')[0],
+      imageCapture: dataElement.getElementsByClassName('imageCapture')[0]
+    }
+  })
+
+  captureBtns.forEach(captureBtn => {
+    captureBtn.onclick = function () {
+
+      dataChild = captureBtn.dataset.button === 'carin' ? dataChilds[0] : dataChilds[1]
+
+      const video = dataChild.video
+      const imageCapture = dataChild.imageCapture
+
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const imageData = canvas.toDataURL()
+
+      imageCapture.src = imageData
+
+
+      fetch('/capture', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ imageData })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Lỗi khi gửi dữ liệu hình ảnh.');
+          }
+          console.log('Hình ảnh đã được gửi và lưu trữ thành công.');
+        })
+        .catch(error => {
+          console.error('Lỗi khi gửi dữ liệu hình ảnh:', error.message);
+        });
+
+    }
+  })
+</script>
