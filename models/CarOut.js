@@ -1,11 +1,7 @@
 const mongoose = require('mongoose')
 
 const carsOutSchema = new mongoose.Schema({
-  carNumberOut: String,
-  timeOut: String,
-  imageOutFirst: Buffer,
-  imageOutSecond: Buffer,
-  imageCarNumberOut: Buffer,
+  imageCar: String,
 })
 const CarOut = mongoose.model('CarOut', carsOutSchema)
 

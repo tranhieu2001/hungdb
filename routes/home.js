@@ -4,6 +4,6 @@ const router = express.Router()
 const homeController = require('../controllers/HomeController')
 
 router.get('/', homeController.render)
-router.post('/capture', homeController.capture)
+router.post('/capture/:type', homeController.capture)
 
 module.exports = router

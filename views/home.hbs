@@ -11,7 +11,7 @@
       </video>
     </div>
     <div class=" col-lg-5">
-      <img class="imageCapture" style="height: 350px; width:100%"></img>
+      <img class="imageCapture" style="height: 350px; width:100%" src="{{#if carIn}}{{carIn.imageCar}}{{/if}}"></img>
     </div>
     <div class="col-lg-2" style="display: flex; flex-direction:column; height:350px">
       <div style="flex: 1;">
@@ -37,7 +37,7 @@
       </video>
     </div>
     <div class=" col-lg-5">
-      <img class="imageCapture" style="height: 350px; width:100%"></img>
+      <img class="imageCapture" style="height: 350px; width:100%" src="{{#if carOut}}{{carOut.imageCar}}{{/if}}"></img>
     </div>
     <div class="col-lg-2" style="display: flex; flex-direction:column; height:350px">
       <div style="flex: 1;">
@@ -53,6 +53,7 @@
   </div>
 </div>
 <script>
+
   const captureBtns = document.querySelectorAll('.captureBtn')
 
   const dataElements = document.querySelectorAll('.data')
@@ -67,7 +68,9 @@
   captureBtns.forEach(captureBtn => {
     captureBtn.onclick = function () {
 
-      dataChild = captureBtn.dataset.button === 'carin' ? dataChilds[0] : dataChilds[1]
+      const type = captureBtn.dataset.button
+
+      const dataChild = type === 'carin' ? dataChilds[0] : dataChilds[1]
 
       const video = dataChild.video
       const imageCapture = dataChild.imageCapture
@@ -79,20 +82,19 @@
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const imageData = canvas.toDataURL()
+      const imageData = canvas.toDataURL('image/jpeg')
 
       imageCapture.src = imageData
 
-
-      fetch('/capture', {
+      fetch(`/capture/${type}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ imageData })
       })
-        .then(response => {
-          if (!response.ok) {
+        .then(res => {
+          if (!res.ok) {
             throw new Error('Lỗi khi gửi dữ liệu hình ảnh.');
           }
           console.log('Hình ảnh đã được gửi và lưu trữ thành công.');
