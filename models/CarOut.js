@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const carsOutSchema = new mongoose.Schema({
-  imageCar: String,
+  path: {
+    type: String,
+    require: true,
+  },
 })
 const CarOut = mongoose.model('CarOut', carsOutSchema)
 

@@ -1,51 +1,57 @@
-const fs = require('fs')
+const multer = require('multer')
+const path = require('path')
 
 const CarIn = require('../models/CarIn')
 const CarOut = require('../models/CarOut')
 
 const { takeDataByClassCar } = require('../utils')
 
+function getMulterOptions(destinationPath, fileName) {
+  return multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, destinationPath)
+    },
+    filename: function (req, file, cb) {
+      cb(null, fileName)
+    },
+  })
+}
+
 class HomeController {
   async render(req, res) {
-    try {
-      const carIn = await CarIn.findOne().sort({ _id: -1 })
-      const carOut = await CarOut.findOne().sort({ _id: -1 })
+    const [carIn, carOut] = await Promise.all([
+      CarIn.findOne().sort({ _id: -1 }),
+      CarOut.findOne().sort({ _id: -1 }),
+    ])
 
-      res.render('home', {
-        carIn: carIn.toObject(),
-        carOut: carOut.toObject(),
-      })
-    } catch (error) {
-      res.render('home')
-      console.error(error)
-    }
+    res.render('home', {
+      carIn: carIn ? carIn.toObject() : null,
+      carOut: carOut ? carOut.toObject() : null,
+    })
   }
 
-  async capture(req, res) {
-    const imageData = req.body.imageData
-
+  capture(req, res) {
     const type = req.params.type
+    const path = `images/captured/${type}`
+    const fileName = 'captured_' + Date.now() + '.png'
 
-    const fileName = `image_${Date.now()}.png`
-    const imageDir = `public/image/${type}`
-
-    fs.writeFile(`${imageDir}/${fileName}`, imageData, 'base64', (err) => {
-      if (err) {
-        console.error('Lỗi khi lưu hình ảnh:', err)
-        res.status(500).send('Lỗi khi lưu hình ảnh')
-      } else {
-        console.log('Hình ảnh đã được lưu:', fileName)
-        res.send('Hình ảnh đã được lưu thành công.')
-      }
+    const upload = multer({
+      storage: getMulterOptions(`./public/${path}`, fileName),
     })
 
-    const dataCar = {
-      imageCar: imageData,
-    }
+    // Lưu ảnh vào local
+    upload.single('screenshot')(req, res, (err) => {
+      if (err) {
+        console.error('Lỗi khi lưu ảnh chụp:', err)
+        return res.status(500).json({ error: 'Lỗi khi lưu ảnh chụp' })
+      }
+      console.log('Ảnh đã được lưu thành công')
+    })
 
+    // Lưu path vào db
     const Model = takeDataByClassCar(type, CarIn, CarOut)
 
-    const Car = new Model(dataCar)
+    const Car = new Model({ path: `/${path}/${fileName}` })
 
     Car.save()
       .then(() => {

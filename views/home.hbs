@@ -11,7 +11,7 @@
       </video>
     </div>
     <div class=" col-lg-5">
-      <img class="imageCapture" style="height: 350px; width:100%" src="{{#if carIn}}{{carIn.imageCar}}{{/if}}"></img>
+      <img class="imageCapture" style="height: 350px; width:100%" src="{{#if carIn}}{{carIn.path}}{{/if}}"></img>
     </div>
     <div class="col-lg-2" style="display: flex; flex-direction:column; height:350px">
       <div style="flex: 1;">
@@ -19,7 +19,9 @@
           src="data:image/jpeg;base64,{{#if carIn}}{{imageToString carIn.imageCarNumberIn}}{{/if}}" alt=""
           style="width:100%; object-fit:cover;">
         <h5>Biển số xe: {{#if carIn}}{{carIn.carNumberIn}}{{/if}}</h5>
-        <p>Metadata:</p>
+        <div>Metadata:
+
+        </div>
       </div>
       <button style="width: 100%; " type="button" class="btn btn-primary captureBtn" data-button="carin">Chụp</button>
     </div>
@@ -37,7 +39,7 @@
       </video>
     </div>
     <div class=" col-lg-5">
-      <img class="imageCapture" style="height: 350px; width:100%" src="{{#if carOut}}{{carOut.imageCar}}{{/if}}"></img>
+      <img class="imageCapture" style="height: 350px; width:100%" src="{{#if carOut}}{{carOut.path}}{{/if}}"></img>
     </div>
     <div class="col-lg-2" style="display: flex; flex-direction:column; height:350px">
       <div style="flex: 1;">
@@ -45,7 +47,9 @@
           src="data:image/jpeg;base64,{{#if carOut}}{{imageToString carOut.imageCarNumberOut}}{{/if}}" alt=""
           style="width:100%; object-fit:cover;">
         <h5>Biển số xe: {{#if carOut}}{{carOut.carNumberOut}}{{/if}}</h5>
-        <p>Metadata:</p>
+        <div>Metadata:
+
+        </div>
       </div>
       <button style="width: 100%; " type="button" class="btn btn-primary captureBtn" data-button="carout">Chụp</button>
 
@@ -53,56 +57,53 @@
   </div>
 </div>
 <script>
+  const captureBtns = document.querySelectorAll('.captureBtn');
+  const dataElements = document.querySelectorAll('.data');
 
-  const captureBtns = document.querySelectorAll('.captureBtn')
-
-  const dataElements = document.querySelectorAll('.data')
+  function uploadImage(formData, type) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/capture/${type}`);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          console.log(xhr.responseText);
+        } else {
+          console.error("Lỗi khi tải hình ảnh.");
+        }
+      }
+    };
+    xhr.send(formData);
+  }
 
   const dataChilds = Array.from(dataElements).map(dataElement => {
     return {
       video: dataElement.getElementsByClassName('video')[0],
       imageCapture: dataElement.getElementsByClassName('imageCapture')[0]
     }
-  })
+  });
 
   captureBtns.forEach(captureBtn => {
     captureBtn.onclick = function () {
-
-      const type = captureBtn.dataset.button
-
-      const dataChild = type === 'carin' ? dataChilds[0] : dataChilds[1]
-
-      const video = dataChild.video
-      const imageCapture = dataChild.imageCapture
-
-
+      const type = captureBtn.dataset.button;
+      const dataChild = type === 'carin' ? dataChilds[0] : dataChilds[1];
+      const video = dataChild.video;
+      const imageCapture = dataChild.imageCapture;
       const canvas = document.createElement('canvas');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL('image/jpeg');
 
-      const imageData = canvas.toDataURL('image/jpeg')
+      imageCapture.src = imageData;
 
-      imageCapture.src = imageData
-
-      fetch(`/capture/${type}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ imageData })
-      })
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Lỗi khi gửi dữ liệu hình ảnh.');
-          }
-          console.log('Hình ảnh đã được gửi và lưu trữ thành công.');
-        })
-        .catch(error => {
-          console.error('Lỗi khi gửi dữ liệu hình ảnh:', error.message);
-        });
+      canvas.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append("screenshot", blob, "screenshot.png");
+        uploadImage(formData, type);
+      }, "image/png");
 
     }
-  })
+  });
+
 </script>
