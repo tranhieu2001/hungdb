@@ -1,5 +1,4 @@
 const multer = require('multer')
-const path = require('path')
 
 const CarIn = require('../models/CarIn')
 const CarOut = require('../models/CarOut')
